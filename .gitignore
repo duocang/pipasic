@@ -11,3 +11,4 @@ build
 dist
 *.mgf
 *.fasta
+*.trie

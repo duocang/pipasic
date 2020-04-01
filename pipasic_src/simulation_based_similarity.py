@@ -135,7 +135,7 @@ def prepDB(fastaDB, path="/home/franziska/bin/Inspect/"):
 	# PrepDB.py from inSpecT source code:
 	# Convert a protein database into concatenated format.
 	# Processes FASTA format.
-	command = "python {path}PrepDB.py FASTA {db}".format(path=path, db=fastaDB)
+	command = "python {path} FASTA {db}".format(path=os.path.join(path, 'PrepDB.py'), db=fastaDB)
 	print "Executing: ",command
 	sys.stdout.flush()
 	os.system(command)
@@ -143,11 +143,10 @@ def prepDB(fastaDB, path="/home/franziska/bin/Inspect/"):
 
 # 5. match spectra against database with Inspect (def)
 def run_inspect(configfile, outputfile, path="", param=""):
-	current_path = os.path.dirname(os.path.realpath(__file__))
 	if platform.system() == 'Windows':
-			inspect_path = os.path.join(current_path, 'inspect', 'inspect.exe')
+			inspect_path = os.path.join(path, 'inspect.exe')
 	else:
-			inspect_path = os.path.join(current_path, 'inspect', 'inspect')
+			inspect_path = os.path.join(path, 'inspect')
 	if len(path) > 0:
 		command = inspect_path + " -i {input} -o {output} -r {path} {param}".format(input=configfile, output=outputfile, path=path, param=param)
 	else:

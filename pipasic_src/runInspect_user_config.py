@@ -129,8 +129,8 @@ def runInspect_config(spectra,
 	# 		# evaluate results from Inspect to calculate an FDR-matrix
 	# 		simMat[i][j] = parseInspect(inspect_out)[2]
 
-	# for line in simMat:
-	# 	print line
+	for line in simMat:
+		print line
 
 
 if __name__=="__main__":

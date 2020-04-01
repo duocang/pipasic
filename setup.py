@@ -14,7 +14,7 @@ setuptools.setup(
     entry_points={
         'console_scripts': [
             'pipasic=pipasic_src:pipasic',
-            'dddd=pipasic_src:main'
+            'dddd=src:main'
         ],
     },
     classifiers=[

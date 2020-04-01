@@ -60,7 +60,7 @@ if __name__ == "__main__":
     optparser.add_option('-m', '--mods', type='string', dest='mods', default=None,
                          help='A string containing all modifications in question, modification choice by filename if not given. [default: %default]')
     optparser.add_option('-i', '--inspect_dir', type='string', dest='insp_dir',
-                         default='./inspect/', help='Inspect directory. [default: %default]')
+                         default=None, help='Inspect directory. [default: %default]')
     optparser.add_option('-f', '--fdr_cutoff', type='float', dest='fdr', default=0.05,
                          help='False discovery rate cut-off for identification lists. [default: %default]')  # -l : list_fdr_cutoff ??
     optparser.add_option('-t', '--decoy_tag', type='str', dest='decoy_tag', default="REVERSED|DECOY",

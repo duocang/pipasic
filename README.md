@@ -11,7 +11,7 @@ We developed pipasic (peptide intensity-weighted proteome abundance similarity  
 
 pipasic might be able to work with different software versions, but we tested  it using the given configuration.
 
-**Python environment**
+**Python 2.7** is a must.  
 
 1. Install [Anaconda](https://docs.anaconda.com/anaconda/install/) ( `conda` command shoudl work in your console)
 
@@ -19,24 +19,115 @@ pipasic might be able to work with different software versions, but we tested  i
 
 3. `conda activate pipasic`  in console to activate your environment, named pipasic
 
-4. `pip install -r requirements.txt` in console install all `Python` dependencies
-
    
+
 
 **Spectrum identification**
 
 Spectrum identification can be done with Inspect or Tide. We used the following
 versions:
 
-- [InsPecT](./inspect) version January 2012 [tutorial](http://proteomics.ucsd.edu/Software/Inspect/InspectDocs/InspectTutorial.pdf)
+- [InsPecT](./pipasic_src/inspect) version January 2012 [tutorial](http://proteomics.ucsd.edu/Software/Inspect/InspectDocs/InspectTutorial.pdf)
 - Tide as part of Crux 1.36
 
 
-## Usage
+
+## Example run
+
+Data has been prepared in local [data](./data) folder, but you can download from [here](https://sourceforge.net/projects/pipasic/files/example.tar.gz/download) too.
+
+#### Test InspecT
+
+Automatized configuration and execution of Inspect peptide identification for  a list of spectrum files and a list of reference proteomes.
+
+> Users can compile `Inspect` from [source code](http://proteomics.ucsd.edu/Software/Inspect/Inspect.20120109.zip) by using `make` command (Linux/MacOS), or build `Inspect.exe` with `Inspect.sln` in Visual Studio (Windows).  But you don’t need to do it at all.
+
+```bash
+# For Linux/MacOS
+./inspect -i ./config_files/config_Inspect_py.txt -o ./example/data/example_species2_InspectOut.txt -r ./inspect/
+```
+
+```bash
+# Windows
+ InsPecT.exe -i ./config_files/config_Inspect_py.txt -o ./example/data/example_species2_InspectOut.txt -r ./inspect/
+```
+
+> Result:
+>
+> 1. example_species1_InspectOut.txt
+> 2. example_species2_InspectOut.txt
+> 3. .index and .trie file of database
+
+#### Full workflow
+
+- **Option 1**
+
+  Run console command:
+
+  ```bash
+  pip install pipasic==1.6
+  pipasic example species1,species2 -s ./data/spectra/ -d ./data/reference/ -I  -o ./result/output -V
+  ```
+
+- **Option 2**
+
+  Run `Python` script:
+
+  ```bash
+  # Install independencies
+  pip install -r requirements.txt
+  # Change directory now.
+  cd ./src/trunk # change directory to trunk folder
+  ```
+
+  ```bash
+  python pipasic.py example species1,species2 -s ../data/spectra/ -d ../data/reference/ -I -i ./inspect/ -o ../result/output -V
+  ```
+
+  
+
+#### Unit test
+
+1. Match spectra against database with Inspect
+
+   ```bash
+   python runInspect_user_config.py --easy True
+   # Result: 
+   # 1. example_species1_InspectOut.txt
+   # 2. example_species2_InspectOut.txt
+   # 3. .index and .trie file of database
+   ```
+
+2. Extract selected information from InsPecT output files and produce a specified  peptide identification (PSM) list for further analyses.
+
+   ```bash
+   python nspectparser.py --easy True 
+   # Result:
+   # 1. result_counts.dat: number of peptides not in decoy returned
+   # 2. specified  peptide identification: 
+   ```
+
+   
+
+3. Search identified peptides in tryptic peptide list of a proteome in order  to weight each peptide  (return: path to output file with line structure: "weight sequence")
+
+   ```bash
+   python trypticpeptides.py --easy true
+   # Result:
+   # 1. peptides_species1.fasta:
+   # 2. peptides_species2.fasta
+   ```
+
+4. Todo
+
+   1. Windows test
+
+## Details
 
 Usage: pipasic.py SPECTRA DB [module options] [input and configuration options]
 
 Overall pipasic calling tool, including:
+
 - weighted (always) and unweighted (optional) similarity estimation
 - correction, using matrix from similarity estimation
 - peptide Identification by InsPecT/Tide
@@ -81,88 +172,10 @@ Options:
   -c COUNTS, --C_spectra=COUNTS
                         File containing numbers of spectra found by
                         identification (Numpy Array dump). [default: none]
-  -q, --quiet           don't print status messages to stdout
+  -q, --quiet           don\'t print status messages to stdout
 ```
 
 
-
-## Example run
-
-Data has been prepared in local [example](./example) folder, but you can download from [here](https://sourceforge.net/projects/pipasic/files/example.tar.gz/download) too.
-
-**Test InspecT**
-
-Automatized configuration and execution of Inspect peptide identification for  a list of spectrum files and a list of reference proteomes.
-
-Users can compile `Inspect` from [source code](./inspect) by using `make` command (Linux/MacOS), or build `Inspect.exe` with `Inspect.sln` in Visual Studio (Windows). 
-
-> The executable Inspect or Inspect.exe has been put in the root directory, side by sied with foler `src`,  `example`, ana `inspect`. Please don’t move them.
-
-```bash
-# For Linux/MacOS
-./inspect -i ./config_files/config_Inspect_py.txt -o ./example/data/example_species2_InspectOut.txt -r ./inspect/
-```
-
-```bash
-# Windows
- InsPecT.exe -i ./config_files/config_Inspect_py.txt -o ./example/data/example_species2_InspectOut.txt -r ./inspect/
-```
-
-> Result:
->
-> 1. example_species1_InspectOut.txt
-> 2. example_species2_InspectOut.txt
-> 3. .index and .trie file of database
-
-**Full workflow**
-
-```bash
-# Change directory now.
-cd ./src/trunk # change directory to trunk folder
-```
-
-```bash
-python pipasic.py example species1,species2 -s ../data/spectra/ -d ../data/reference/ -I -i ./inspect/ -o ../result/output -V
-```
-
-**Unit test**
-
-```bash
-# Change directory now.
-cd ./src # change directory to trunk folder
-```
-
-1. *match spectra against database with Inspect* 
-
-   ```bash
-   python runInspect_user_config.py --easy True
-   # Result: 
-   # 1. example_species1_InspectOut.txt
-   # 2. example_species2_InspectOut.txt
-   # 3. .index and .trie file of database
-   ```
-
-2. extract selected information from InsPecT output files and produce a specified  peptide identification (PSM) list for further analyses.
-
-   ```bash
-   python nspectparser.py --easy True 
-   # Result:
-   # 1. result_counts.dat: number of peptides not in decoy returned
-   # 2. specified  peptide identification: 
-   ```
-
-   
-
-3. Search identified peptides in tryptic peptide list of a proteome in order  to weight each peptide  (return: path to output file with line structure: "weight sequence")
-
-   ```bash
-   python trypticpeptides.py --easy true
-   # Result:
-   # 1. peptides_species1.fasta:
-   # 2. peptides_species2.fasta
-   ```
-
-4. ==Todo==
 
 ## License
 

@@ -9,6 +9,7 @@ __pycache__/
 *.pyc
 build
 dist
-*.mgf
-*.fasta
-*.trie
+pipasic_src
+pipasic.egg-info
+data/reference/*
+data/spectra/*

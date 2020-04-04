@@ -11,6 +11,21 @@ We developed pipasic (peptide intensity-weighted proteome abundance similarity  
 
 pipasic might be able to work with different software versions, but we tested  it using the given configuration.
 
+
+
+**file structure**
+
+```basy
+data
+├── reference
+│   ├── species1.fasta
+│   ├── species1_decoy.fasta
+│   ├── species2.fasta
+│   └── species2_decoy.fasta
+└── spectra
+    └──example.mgf
+```
+
 **Python 2.7** is a must.  
 
 1. Install [Anaconda](https://docs.anaconda.com/anaconda/install/) ( `conda` command shoudl work in your console)
@@ -20,7 +35,6 @@ pipasic might be able to work with different software versions, but we tested  i
 3. `conda activate pipasic`  in console to activate your environment, named pipasic
 
    
-
 
 **Spectrum identification**
 
@@ -81,7 +95,48 @@ Automatized configuration and execution of Inspect peptide identification for  a
   ```
 
   ```bash
-  python pipasic.py example species1,species2 -s ../data/spectra/ -d ../data/reference/ -I -i ./inspect/ -o ../result/output -V
+  python pipasic.py example species1,species2 -s ../data/spectra/ -d ../data/reference/ -I -o ../result/output -V
+  ```
+
+- **Option 3**
+
+  Run `Docker`
+
+  Inside Docker image, there is a folder named `shared`, you can used `-v` to indicate the shared folder between `Docker` and `host`. 
+
+  The Python script in Docker will have the access to the content of the shared folder.
+
+  File structure in host:
+
+  ```bash
+  container-data
+  ├── reference
+  │   ├── species1.fasta
+  │   ├── species1_decoy.fasta
+  │   └── species2.fasta
+  └── spectra
+      └──example.mgf
+  ```
+
+  File structure in Docker:
+
+  ```bash
+  shared
+  ├── reference
+  │   ├── species1.fasta
+  │   ├── species1_decoy.fasta
+  │   └── species2.fasta
+  └── spectra
+      └──example.mgf
+  ```
+
+  
+
+  ```bash
+  # ~/Downloads/pipasic_docker/container-data is the folder you save your spectra and db files
+  docker build  -t  pipasic --no-cache .
+  
+  docker run --rm -v [path to container-data]:/pipasic/shared pipasic python ./pipasic_src/pipasic.py example species1,species2 -I -V -s ./shared/spectra/ -d ./shared/reference/  -o ./shared/output
   ```
 
   

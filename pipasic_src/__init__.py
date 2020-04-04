@@ -1,6 +1,4 @@
 # -*- coding: UTF-8 -*-
-
-# -*- coding: UTF-8 -*-
 """
 Aggregation of pipasic functionalities (by import) to a single command line tool.
 

@@ -137,8 +137,8 @@ def prepDB(fastaDB, path="/home/franziska/bin/Inspect/"):
 	# Processes FASTA format.
 	command = "python {path} FASTA {db}".format(path=os.path.join(path, 'PrepDB.py'), db=fastaDB)
 	print "Executing: ",command
-	sys.stdout.flush()
-	os.system(command)
+	# sys.stdout.flush()
+	# os.system(command)
 	return 1
 
 # 5. match spectra against database with Inspect (def)

@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 .SUFFIXES:
 .SUFFIXES: .c .o
-CC = gcc-9
+CC = gcc
 CFLAGS = -g -DDEBUG -D_CONSOLE -O1 -funroll-loops -lz
 LDFLAGS = -lm -lexpat
 
@@ -25,7 +25,7 @@ all: $(EXE)
 	$(CC) $(CFLAGS) -c $<
 
 $(EXE): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(EXE) $(OBJS)
+	$(CC) $(CFLAGS)  -o $(EXE) $(OBJS) $(LDFLAGS)
 
 clean-objs:
 	@rm -f $(OBJS) $(MPI_OBJS)

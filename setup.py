@@ -10,7 +10,7 @@ setuptools.setup(
     url="https://gitlab.com/wangxuesong29/pipasic/-/tree/master",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=['Biopython==1.76', 'Numpy==1.16.6', 'matplotlib==1.4.3', 'scipy==1.2.3', 'six==1.14.0'],
+    install_requires=['Biopython==1.76', 'Numpy==1.22.0', 'matplotlib==1.4.3', 'scipy==1.2.3', 'six==1.14.0'],
     entry_points={
         'console_scripts': [
             'pipasic=pipasic_src:pipasic',
